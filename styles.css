@@ -1939,61 +1939,65 @@ section {
 
     /* Experience Mobile Styles */
     .experience {
-        padding: 60px 0;
+        padding: 50px 0;
     }
 
     .experience-stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        margin: 30px 0 50px;
-        padding: 0 15px;
+        gap: 12px;
+        margin: 25px 0 40px;
+        padding: 0 10px;
     }
 
     .stat-card {
-        padding: 25px 15px;
+        padding: 20px 12px;
+        text-align: center;
     }
 
     .stat-icon {
-        font-size: 2rem;
-        margin-bottom: 10px;
+        font-size: 1.8rem;
+        margin-bottom: 8px;
     }
 
     .stat-info h3 {
-        font-size: 1.8rem;
-        margin: 8px 0 5px;
+        font-size: 1.5rem;
+        margin: 5px 0 3px;
     }
 
     .stat-info p {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        line-height: 1.3;
     }
 
     .timeline {
-        padding: 20px 0;
+        padding: 15px 0;
+        margin: 0 10px;
     }
 
     .timeline::before {
-        left: 20px;
+        left: 18px;
         transform: none;
+        width: 2px;
     }
 
     .timeline-item {
         width: 100%;
         left: 0;
-        padding-left: 50px;
-        padding-right: 15px;
+        padding-left: 45px;
+        padding-right: 10px;
         text-align: left;
-        margin: 30px 0;
+        margin: 25px 0;
     }
 
     .timeline-item .timeline-marker {
-        left: 5px;
-        top: 15px;
+        left: 8px;
+        top: 12px;
     }
 
     .timeline-dot {
-        width: 24px;
-        height: 24px;
-        border: 3px solid #fff;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #fff;
     }
 
     .timeline-line {
@@ -2001,91 +2005,109 @@ section {
     }
 
     .timeline-card {
-        border-radius: 15px;
+        border-radius: 12px;
+        margin-bottom: 15px;
     }
 
     .timeline-header {
-        padding: 20px 20px 15px;
+        padding: 18px 18px 12px;
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: 10px;
     }
 
     .timeline-date {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .timeline-duration {
         align-self: flex-start;
-        font-size: 0.85rem;
-        padding: 4px 12px;
+        font-size: 0.8rem;
+        padding: 3px 10px;
     }
 
     .timeline-content {
-        padding: 20px;
+        padding: 18px;
     }
 
     .role-info h3 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
+        line-height: 1.3;
+        margin-bottom: 8px;
     }
 
     .role-info h4 {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
     }
 
     .role-tags {
-        gap: 8px;
+        gap: 6px;
+        margin-bottom: 20px;
     }
 
     .tag {
-        font-size: 0.75rem;
-        padding: 4px 10px;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+    }
+
+    .achievements {
+        margin-top: 20px;
     }
 
     .achievements h5 {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
     }
 
     .achievement-grid {
-        gap: 15px;
+        gap: 12px;
     }
 
     .achievement-item {
-        padding: 15px;
-        gap: 12px;
+        padding: 12px;
+        gap: 10px;
         border-radius: 8px;
+        flex-direction: row;
+        align-items: flex-start;
     }
 
     .achievement-item i {
-        font-size: 1.1rem;
+        font-size: 1rem;
+        margin-top: 2px;
+        flex-shrink: 0;
     }
 
     .achievement-item strong {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         line-height: 1.3;
+        margin-bottom: 3px;
     }
 
     .achievement-item p {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         line-height: 1.4;
+        margin: 0;
     }
 
     .experience-cta {
-        margin-top: 50px;
-        padding: 30px 20px;
+        margin-top: 40px;
+        padding: 25px 15px;
     }
 
     .experience-cta h3 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        margin-bottom: 12px;
     }
 
     .experience-cta p {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        margin-bottom: 20px;
     }
 
     .experience-cta .btn {
-        padding: 12px 25px;
-        font-size: 1rem;
+        padding: 12px 24px;
+        font-size: 0.95rem;
     }
 
     .contact-content {
@@ -2297,107 +2319,132 @@ section {
 
     /* Experience Extra Small Mobile */
     .experience {
-        padding: 50px 0;
+        padding: 40px 0;
     }
 
     .experience-stats {
         grid-template-columns: 1fr;
-        gap: 12px;
-        padding: 0 10px;
+        gap: 10px;
+        padding: 0 15px;
+        margin: 20px 0 30px;
     }
 
     .stat-card {
-        padding: 20px 15px;
-        margin: 0 5px;
+        padding: 18px 12px;
+        margin: 0;
     }
 
     .stat-icon {
-        font-size: 1.8rem;
-    }
-
-    .stat-info h3 {
         font-size: 1.6rem;
     }
 
+    .stat-info h3 {
+        font-size: 1.4rem;
+    }
+
+    .stat-info p {
+        font-size: 0.8rem;
+    }
+
+    .timeline {
+        margin: 0 5px;
+    }
+
     .timeline::before {
-        left: 15px;
+        left: 12px;
     }
 
     .timeline-item {
-        padding-left: 40px;
-        padding-right: 10px;
-        margin: 25px 0;
+        padding-left: 35px;
+        padding-right: 8px;
+        margin: 20px 0;
     }
 
     .timeline-item .timeline-marker {
-        left: 0;
+        left: 2px;
     }
 
     .timeline-dot {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         border: 2px solid #fff;
     }
 
     .timeline-header {
-        padding: 15px 15px 10px;
-        gap: 8px;
-    }
-
-    .timeline-content {
-        padding: 15px;
-    }
-
-    .role-info h3 {
-        font-size: 1.2rem;
-        line-height: 1.3;
-    }
-
-    .role-info h4 {
-        font-size: 0.95rem;
-    }
-
-    .role-tags {
+        padding: 12px 12px 8px;
         gap: 6px;
     }
 
+    .timeline-content {
+        padding: 12px;
+    }
+
+    .role-info h3 {
+        font-size: 1.1rem;
+        line-height: 1.3;
+        margin-bottom: 6px;
+    }
+
+    .role-info h4 {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+
+    .role-tags {
+        gap: 4px;
+        margin-bottom: 15px;
+    }
+
     .tag {
-        font-size: 0.7rem;
-        padding: 3px 8px;
+        font-size: 0.65rem;
+        padding: 2px 6px;
+    }
+
+    .achievements h5 {
+        font-size: 0.9rem;
+        margin-bottom: 12px;
     }
 
     .achievement-item {
         flex-direction: column;
         text-align: center;
-        gap: 10px;
-        padding: 12px;
+        gap: 8px;
+        padding: 10px;
     }
 
     .achievement-item i {
         align-self: center;
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .achievement-item strong {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        margin-bottom: 2px;
     }
 
     .achievement-item p {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+        line-height: 1.3;
     }
 
     .experience-cta {
-        padding: 25px 15px;
-        margin-top: 40px;
+        padding: 20px 12px;
+        margin-top: 30px;
     }
 
     .experience-cta h3 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+
+    .experience-cta p {
+        font-size: 0.9rem;
+        margin-bottom: 18px;
     }
 
     .experience-cta .btn {
-        padding: 10px 20px;
-        font-size: 0.95rem;
+        padding: 10px 18px;
+        font-size: 0.9rem;
     }
 
     .project-image {
