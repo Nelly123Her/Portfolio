@@ -982,7 +982,7 @@ section {
 /* Experience Section */
 .experience {
     padding: 80px 0;
-    background: linear-gradient(135deg, #2d1b69 0%, #11998e 50%, #38ef7d 100%);
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 30%, #0d1421 70%, #111 100%);
     color: white;
     position: relative;
     overflow: hidden;
@@ -1007,25 +1007,26 @@ section {
 /* Experience Stats */
 .experience-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
     margin: 50px 0 80px;
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
+    padding: 0 20px;
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 212, 255, 0.1);
     padding: 30px 20px;
     border-radius: 15px;
     text-align: center;
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(0, 212, 255, 0.2);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
 }
 
 .stat-card::before {
@@ -1045,15 +1046,16 @@ section {
 
 .stat-card:hover {
     transform: translateY(-10px) scale(1.05);
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 212, 255, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+    border-color: rgba(0, 212, 255, 0.4);
 }
 
 .stat-icon {
     font-size: 2.5rem;
     margin-bottom: 15px;
-    color: #38ef7d;
-    text-shadow: 0 2px 10px rgba(56, 239, 125, 0.3);
+    color: #00d4ff;
+    text-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
 }
 
 .stat-info h3 {
@@ -1085,7 +1087,7 @@ section {
     top: 0;
     bottom: 0;
     width: 4px;
-    background: linear-gradient(to bottom, #ffd700, rgba(255, 215, 0, 0.3));
+    background: linear-gradient(to bottom, #00d4ff, rgba(0, 212, 255, 0.3));
     transform: translateX(-50%);
     border-radius: 2px;
 }
@@ -1131,17 +1133,17 @@ section {
 .timeline-dot {
     width: 30px;
     height: 30px;
-    background: #ffd700;
+    background: #00d4ff;
     border: 4px solid #fff;
     border-radius: 50%;
     position: relative;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
     transition: all 0.3s ease;
 }
 
 .timeline-item.active .timeline-dot {
-    background: #ff6b6b;
-    box-shadow: 0 0 30px rgba(255, 107, 107, 0.7);
+    background: #0099cc;
+    box-shadow: 0 0 30px rgba(0, 153, 204, 0.7);
     animation: pulse 2s infinite;
 }
 
@@ -1183,7 +1185,7 @@ section {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #ffd700, #ff6b6b, #4ecdc4);
+    background: linear-gradient(90deg, #00d4ff, #0099cc, #007acc);
 }
 
 .timeline-card:hover {
@@ -1204,14 +1206,14 @@ section {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #ffd700;
+    color: #00d4ff;
     font-weight: 600;
     font-size: 1.1rem;
 }
 
 .timeline-duration {
-    background: rgba(255, 215, 0, 0.2);
-    color: #ffd700;
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
     padding: 5px 15px;
     border-radius: 20px;
     font-size: 0.9rem;
@@ -1260,13 +1262,13 @@ section {
 }
 
 .tag:hover {
-    background: rgba(255, 215, 0, 0.3);
-    border-color: #ffd700;
+    background: rgba(0, 212, 255, 0.3);
+    border-color: #00d4ff;
     transform: translateY(-2px);
 }
 
 .achievements h5 {
-    color: #ffd700;
+    color: #00d4ff;
     margin-bottom: 20px;
     font-size: 1.1rem;
     display: flex;
@@ -1284,19 +1286,20 @@ section {
     gap: 15px;
     align-items: flex-start;
     padding: 15px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 212, 255, 0.05);
     border-radius: 10px;
-    border-left: 3px solid #ffd700;
+    border-left: 3px solid #00d4ff;
     transition: all 0.3s ease;
 }
 
 .achievement-item:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 212, 255, 0.1);
     transform: translateX(5px);
+    border-left-color: #0099cc;
 }
 
 .achievement-item i {
-    color: #ffd700;
+    color: #00d4ff;
     font-size: 1.2rem;
     margin-top: 2px;
     min-width: 20px;
@@ -1935,22 +1938,33 @@ section {
     }
 
     /* Experience Mobile Styles */
+    .experience {
+        padding: 60px 0;
+    }
+
     .experience-stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 15px;
         margin: 30px 0 50px;
+        padding: 0 15px;
     }
 
     .stat-card {
-        padding: 20px 15px;
+        padding: 25px 15px;
     }
 
     .stat-icon {
         font-size: 2rem;
+        margin-bottom: 10px;
     }
 
     .stat-info h3 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        margin: 8px 0 5px;
+    }
+
+    .stat-info p {
+        font-size: 0.9rem;
     }
 
     .timeline {
@@ -1965,20 +1979,20 @@ section {
     .timeline-item {
         width: 100%;
         left: 0;
-        padding-left: 60px;
-        padding-right: 20px;
+        padding-left: 50px;
+        padding-right: 15px;
         text-align: left;
-        margin: 40px 0;
+        margin: 30px 0;
     }
 
     .timeline-item .timeline-marker {
         left: 5px;
-        top: 20px;
+        top: 15px;
     }
 
     .timeline-dot {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         border: 3px solid #fff;
     }
 
@@ -1994,7 +2008,7 @@ section {
         padding: 20px 20px 15px;
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        gap: 12px;
     }
 
     .timeline-date {
@@ -2002,7 +2016,9 @@ section {
     }
 
     .timeline-duration {
-        align-self: flex-end;
+        align-self: flex-start;
+        font-size: 0.85rem;
+        padding: 4px 12px;
     }
 
     .timeline-content {
@@ -2030,21 +2046,28 @@ section {
         font-size: 1rem;
     }
 
+    .achievement-grid {
+        gap: 15px;
+    }
+
     .achievement-item {
-        padding: 12px;
+        padding: 15px;
         gap: 12px;
+        border-radius: 8px;
     }
 
     .achievement-item i {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
     .achievement-item strong {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
+        line-height: 1.3;
     }
 
     .achievement-item p {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
     }
 
     .experience-cta {
@@ -2273,40 +2296,108 @@ section {
     }
 
     /* Experience Extra Small Mobile */
+    .experience {
+        padding: 50px 0;
+    }
+
     .experience-stats {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 12px;
+        padding: 0 10px;
     }
 
     .stat-card {
-        padding: 15px;
+        padding: 20px 15px;
+        margin: 0 5px;
+    }
+
+    .stat-icon {
+        font-size: 1.8rem;
+    }
+
+    .stat-info h3 {
+        font-size: 1.6rem;
+    }
+
+    .timeline::before {
+        left: 15px;
     }
 
     .timeline-item {
-        padding-left: 50px;
-        padding-right: 15px;
+        padding-left: 40px;
+        padding-right: 10px;
+        margin: 25px 0;
+    }
+
+    .timeline-item .timeline-marker {
+        left: 0;
+    }
+
+    .timeline-dot {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #fff;
     }
 
     .timeline-header {
         padding: 15px 15px 10px;
+        gap: 8px;
     }
 
     .timeline-content {
         padding: 15px;
     }
 
+    .role-info h3 {
+        font-size: 1.2rem;
+        line-height: 1.3;
+    }
+
+    .role-info h4 {
+        font-size: 0.95rem;
+    }
+
+    .role-tags {
+        gap: 6px;
+    }
+
+    .tag {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+    }
+
     .achievement-item {
         flex-direction: column;
         text-align: center;
         gap: 10px;
+        padding: 12px;
     }
 
     .achievement-item i {
         align-self: center;
+        font-size: 1rem;
+    }
+
+    .achievement-item strong {
+        font-size: 0.9rem;
+    }
+
+    .achievement-item p {
+        font-size: 0.85rem;
     }
 
     .experience-cta {
         padding: 25px 15px;
+        margin-top: 40px;
+    }
+
+    .experience-cta h3 {
+        font-size: 1.4rem;
+    }
+
+    .experience-cta .btn {
+        padding: 10px 20px;
+        font-size: 0.95rem;
     }
 
     .project-image {
