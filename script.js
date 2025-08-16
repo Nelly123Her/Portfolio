@@ -750,7 +750,7 @@ function logPerformance() {
 logPerformance();
 
 // Django API Configuration
-const DJANGO_API_BASE = 'http://127.0.0.1:8001/api';
+const DJANGO_API_BASE = 'http://127.0.0.1:8000/api';
 
 // API Bridge Functions
 async function fetchBlogPosts() {
