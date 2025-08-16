@@ -1,8 +1,16 @@
 services:
   - type: web
     name: sre-portfolio
+    runtime: static
     buildCommand: ""
     staticPublishPath: .
+    headers:
+      - path: "*.css"
+        name: "Content-Type"
+        value: "text/css"
+      - path: "*.js"
+        name: "Content-Type"
+        value: "application/javascript"
     routes:
       - type: rewrite
         source: /*
