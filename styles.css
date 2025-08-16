@@ -1972,6 +1972,8 @@ section {
     .timeline {
         padding: 15px 0;
         margin: 0 10px;
+        overflow-x: hidden;
+        max-width: 100%;
     }
 
     .timeline::before {
@@ -1982,11 +1984,20 @@ section {
 
     .timeline-item {
         width: 100%;
-        left: 0;
+        left: 0 !important;
         padding-left: 50px;
         padding-right: 10px;
         text-align: left;
         margin: 25px 0;
+        will-change: transform, opacity;
+        transform: translateZ(0);
+    }
+
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+        left: 0 !important;
+        padding-left: 50px;
+        padding-right: 10px;
     }
 
     .timeline-item .timeline-marker {
@@ -1994,10 +2005,18 @@ section {
         top: 15px;
     }
 
+    .timeline-item:nth-child(odd) .timeline-marker,
+    .timeline-item:nth-child(even) .timeline-marker {
+        left: 10px;
+        right: auto;
+    }
+
     .timeline-dot {
         width: 20px;
         height: 20px;
         border: 2px solid #fff;
+        touch-action: manipulation;
+        cursor: pointer;
     }
 
     .timeline-line {
@@ -2008,6 +2027,10 @@ section {
         border-radius: 12px;
         margin-bottom: 15px;
         margin-left: 5px;
+        max-width: calc(100vw - 80px);
+        box-sizing: border-box;
+        min-height: 44px;
+        touch-action: manipulation;
     }
 
     .timeline-header {
@@ -2349,6 +2372,8 @@ section {
 
     .timeline {
         margin: 0 5px;
+        overflow-x: hidden;
+        max-width: 100%;
     }
 
     .timeline::before {
@@ -2356,9 +2381,22 @@ section {
     }
 
     .timeline-item {
+        width: 100%;
+        left: 0 !important;
         padding-left: 40px;
         padding-right: 8px;
         margin: 20px 0;
+        max-width: calc(100vw - 20px);
+        box-sizing: border-box;
+        will-change: transform, opacity;
+        transform: translateZ(0);
+    }
+
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+        left: 0 !important;
+        padding-left: 40px;
+        padding-right: 8px;
     }
 
     .timeline-item .timeline-marker {
@@ -2366,10 +2404,31 @@ section {
         top: 12px;
     }
 
+    .timeline-item:nth-child(odd) .timeline-marker,
+    .timeline-item:nth-child(even) .timeline-marker {
+        left: 5px;
+        right: auto;
+    }
+
     .timeline-dot {
         width: 18px;
         height: 18px;
         border: 2px solid #fff;
+        touch-action: manipulation;
+        cursor: pointer;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .timeline-dot::before {
+        content: '';
+        width: 18px;
+        height: 18px;
+        background: inherit;
+        border-radius: inherit;
     }
 
     .timeline-header {
