@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Categories Test</title>
+</head>
+<body>
+    <h1>Categories Test Page</h1>
+    <p>Testing without base template inheritance</p>
+    
+    {% for category in categories %}
+        <div>
+            <h3>{{ category.name }}</h3>
+            <p>Published posts: {{ category.published_count }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>

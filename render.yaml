@@ -1,17 +1,28 @@
 services:
   - type: web
-    name: sre-portfolio
-    runtime: static
-    buildCommand: ""
-    staticPublishPath: .
-    headers:
-      - path: "*.css"
-        name: "Content-Type"
-        value: "text/css"
-      - path: "*.js"
-        name: "Content-Type"
-        value: "application/javascript"
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    name: sre-portfolio-dashboard
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: "cd Dashboard && pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+    startCommand: "cd Dashboard && gunicorn blog_dashboard.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: DJANGO_SETTINGS_MODULE
+        value: blog_dashboard.settings
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sre-portfolio-db
+          property: connectionString
+
+databases:
+  - name: sre-portfolio-db
+    plan: free
+    region: oregon

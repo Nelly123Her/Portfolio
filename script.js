@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScrolling();
     initScrollProgress();
     initParallaxEffects();
+    
+    // Load blog posts from Django API
+    populateBlogGrid();
 });
 
 // Navigation functionality
@@ -726,6 +729,12 @@ function initAccessibility() {
 // Initialize accessibility features
 initAccessibility();
 
+// Initialize blog integration when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Populate blog grid with Django data
+    populateBlogGrid();
+});
+
 // Add performance monitoring
 function logPerformance() {
     if ('performance' in window) {
@@ -739,3 +748,336 @@ function logPerformance() {
 }
 
 logPerformance();
+
+// Django API Configuration
+const DJANGO_API_BASE = 'http://127.0.0.1:8001/api';
+
+// API Bridge Functions
+async function fetchBlogPosts() {
+    try {
+        const response = await fetch(`${DJANGO_API_BASE}/posts/?status=published`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.results || data;
+    } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        return [];
+    }
+}
+
+async function fetchBlogPost(postId) {
+    try {
+        const response = await fetch(`${DJANGO_API_BASE}/posts/${postId}/`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching blog post:', error);
+        return null;
+    }
+}
+
+// Function to populate blog grid with Django data
+async function populateBlogGrid() {
+    const blogGrid = document.querySelector('.blog-grid');
+    if (!blogGrid) {
+        console.log('Blog grid element not found');
+        return;
+    }
+
+    try {
+        console.log('Fetching blog posts from Django API...');
+        const posts = await fetchBlogPosts();
+        console.log('Fetched posts:', posts);
+        
+        if (posts.length === 0) {
+            console.log('No posts found, keeping static content');
+            // Keep existing static content if no posts from Django
+            return;
+        }
+
+        console.log('Replacing static content with Django posts');
+        // Clear existing content
+        blogGrid.innerHTML = '';
+
+        // Create blog cards from Django data
+        posts.forEach(post => {
+            const blogCard = createBlogCard(post);
+            blogGrid.appendChild(blogCard);
+        });
+        
+        console.log('Successfully populated blog grid with', posts.length, 'posts');
+    } catch (error) {
+        console.error('Error populating blog grid:', error);
+        // Keep existing static content on error
+    }
+}
+
+// Function to create blog card element
+function createBlogCard(post) {
+    const article = document.createElement('article');
+    article.className = 'blog-card';
+    
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long' 
+        });
+    };
+    
+    article.innerHTML = `
+        <div class="blog-header">
+            <div class="blog-category">${post.category_name || 'General'}</div>
+            <div class="blog-date">${formatDate(post.published_at || post.created_at)}</div>
+        </div>
+        <h3 class="blog-title">${post.title}</h3>
+        <p class="blog-excerpt">
+            ${post.excerpt || post.content.substring(0, 200) + '...'}
+        </p>
+        <div class="blog-tags">
+            ${post.tag_names.map(tag => `<span class="blog-tag">${tag}</span>`).join('')}
+        </div>
+        <a href="#" class="blog-link" onclick="openDjangoBlogPost(${post.id})">
+            Read More <i class="fas fa-arrow-right"></i>
+        </a>
+    `;
+    
+    return article;
+}
+
+// Function to open blog post from Django
+async function openDjangoBlogPost(postId) {
+    const post = await fetchBlogPost(postId);
+    if (!post) {
+        showNotification('Error loading blog post', 'error');
+        return;
+    }
+    
+    // Update modal with Django post data
+    const modal = document.getElementById('blog-modal');
+    const content = document.getElementById('blog-post-content');
+    
+    content.innerHTML = `
+        <div class="blog-post-header">
+            <div class="blog-post-category">${post.category_name || 'General'}</div>
+            <h1 class="blog-post-title">${post.title}</h1>
+            <div class="blog-post-meta">
+                <span><i class="fas fa-calendar"></i>${new Date(post.published_at || post.created_at).toLocaleDateString()}</span>
+                <span><i class="fas fa-clock"></i>${post.reading_time} min read</span>
+                <span><i class="fas fa-user"></i>${post.author_name}</span>
+                <span><i class="fas fa-eye"></i>${post.views} views</span>
+            </div>
+            <div class="blog-post-tags">
+                ${post.tag_names.map(tag => `<span class="blog-post-tag">${tag}</span>`).join('')}
+            </div>
+        </div>
+        <div class="blog-post-content">
+            ${formatBlogContent(post.content)}
+        </div>
+    `;
+    
+    // Show modal with animation
+    modal.style.display = 'flex';
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+// Function to format blog content
+function formatBlogContent(content) {
+    // Basic HTML formatting - you can enhance this with a markdown parser if needed
+    return content
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>')
+        .replace(/^/, '<p>')
+        .replace(/$/, '</p>');
+}
+
+// Blog Modal Functions
+function openBlogPost(postId) {
+    const modal = document.getElementById('blog-modal');
+    const content = document.getElementById('blog-post-content');
+    
+    // Blog post content data (fallback for static content)
+    const blogPosts = {
+        'zero-trust': {
+            category: 'DevOps',
+            title: 'Implementing Zero-Trust Architecture in Multi-Cloud Environments',
+            date: 'December 15, 2024',
+            readTime: '12 min read',
+            author: 'Nelly B. Hernández',
+            tags: ['Security', 'Multi-Cloud', 'Zero-Trust', 'AWS', 'Azure', 'DevOps'],
+            content: `
+                <h2>Introduction</h2>
+                <p>In today's rapidly evolving digital landscape, traditional perimeter-based security models are no longer sufficient to protect organizations from sophisticated cyber threats. The concept of "never trust, always verify" has become the cornerstone of modern cybersecurity strategies, particularly in multi-cloud environments where data and applications span across multiple cloud providers.</p>
+                
+                <p>Zero-Trust Architecture (ZTA) represents a paradigm shift from the traditional "castle and moat" security model to a more granular, identity-centric approach. This comprehensive guide explores the implementation of Zero-Trust principles across AWS and Azure infrastructures, providing practical insights and best practices for security professionals and DevOps engineers.</p>
+
+                <h2>Understanding Zero-Trust Architecture</h2>
+                <p>Zero-Trust Architecture is built on three core principles:</p>
+                <ul>
+                    <li><strong>Never Trust, Always Verify:</strong> Every user, device, and application must be authenticated and authorized before accessing resources</li>
+                    <li><strong>Least Privilege Access:</strong> Users and systems should only have access to the minimum resources necessary to perform their functions</li>
+                    <li><strong>Assume Breach:</strong> Design systems with the assumption that threats may already be present within the network</li>
+                </ul>
+
+                <blockquote>
+                    "Zero Trust is not a single technology or solution, but rather a strategic approach to cybersecurity that centers around the belief that organizations should not automatically trust anything inside or outside its perimeters."
+                </blockquote>
+
+                <h2>Multi-Cloud Security Challenges</h2>
+                <p>Implementing security across multiple cloud providers introduces unique challenges:</p>
+                
+                <h3>Identity and Access Management Complexity</h3>
+                <p>Managing identities across AWS IAM, Azure Active Directory, and potentially other identity providers requires careful orchestration and consistent policy enforcement. Each cloud provider has its own identity model, making unified access control a significant challenge.</p>
+                
+                <h3>Network Segmentation Across Clouds</h3>
+                <p>Traditional network perimeters become blurred in multi-cloud environments. Implementing consistent network segmentation policies across AWS VPCs and Azure VNets requires sophisticated networking strategies and careful planning.</p>
+                
+                <h3>Data Protection and Compliance</h3>
+                <p>Ensuring data protection standards and regulatory compliance across different cloud environments requires comprehensive data classification, encryption strategies, and audit capabilities.</p>
+
+                <h2>Implementation Strategy</h2>
+                
+                <h3>1. Identity-Centric Security Model</h3>
+                <p>The foundation of Zero-Trust implementation begins with establishing a robust identity management system:</p>
+                
+                <pre><code># Example: AWS IAM Policy for Zero-Trust Access
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::ACCOUNT:user/USERNAME"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::secure-bucket/*",
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": "203.0.113.0/24"
+        },
+        "DateGreaterThan": {
+          "aws:CurrentTime": "2024-01-01T00:00:00Z"
+        }
+      }
+    }
+  ]
+}</code></pre>
+
+                <h3>2. Network Micro-Segmentation</h3>
+                <p>Implement granular network controls using cloud-native security groups and network access control lists:</p>
+                
+                <ul>
+                    <li><strong>AWS Security Groups:</strong> Configure stateful firewall rules at the instance level</li>
+                    <li><strong>Azure Network Security Groups:</strong> Implement subnet and network interface level filtering</li>
+                    <li><strong>Application-Level Segmentation:</strong> Use service mesh technologies like Istio for microservices communication</li>
+                </ul>
+
+                <h3>3. Continuous Monitoring and Analytics</h3>
+                <p>Deploy comprehensive monitoring solutions across both cloud environments:</p>
+                
+                <pre><code># Example: CloudWatch Log Insights Query for Security Analysis
+fields @timestamp, sourceIPAddress, eventName, userIdentity.type
+| filter eventName like /Assume/
+| stats count() by sourceIPAddress
+| sort count desc
+| limit 20</code></pre>
+
+                <h2>Best Practices and Recommendations</h2>
+                
+                <h3>Multi-Factor Authentication (MFA)</h3>
+                <p>Implement strong MFA across all cloud accounts and services. Use hardware security keys where possible and ensure backup authentication methods are available.</p>
+                
+                <h3>Privileged Access Management (PAM)</h3>
+                <p>Deploy just-in-time access solutions and implement break-glass procedures for emergency access scenarios. Regular access reviews and automated de-provisioning are essential.</p>
+                
+                <h3>Data Encryption</h3>
+                <p>Implement encryption at rest and in transit across all cloud services. Use cloud-native key management services (AWS KMS, Azure Key Vault) and maintain proper key rotation policies.</p>
+
+                <h2>Tools and Technologies</h2>
+                <p>Several tools can facilitate Zero-Trust implementation in multi-cloud environments:</p>
+                
+                <ul>
+                    <li><strong>Identity Providers:</strong> Okta, Azure AD, AWS SSO</li>
+                    <li><strong>Network Security:</strong> Palo Alto Prisma, Zscaler, AWS Network Firewall</li>
+                    <li><strong>Monitoring:</strong> Splunk, Datadog, AWS CloudTrail, Azure Sentinel</li>
+                    <li><strong>Compliance:</strong> AWS Config, Azure Policy, Cloud Security Posture Management tools</li>
+                </ul>
+
+                <h2>Conclusion</h2>
+                <p>Implementing Zero-Trust Architecture in multi-cloud environments requires a comprehensive approach that addresses identity management, network segmentation, continuous monitoring, and data protection. While the complexity of managing security across multiple cloud providers presents challenges, the benefits of a well-implemented Zero-Trust model far outweigh the initial investment.</p>
+                
+                <p>Success in Zero-Trust implementation depends on careful planning, gradual rollout, and continuous improvement. Organizations should start with high-value assets and gradually expand the Zero-Trust model across their entire multi-cloud infrastructure.</p>
+                
+                <p>As cloud technologies continue to evolve, Zero-Trust principles will remain fundamental to maintaining robust security postures in increasingly complex and distributed environments.</p>
+            `
+        }
+    };
+    
+    const post = blogPosts[postId];
+    if (!post) return;
+    
+    // Populate modal content
+    content.innerHTML = `
+        <div class="blog-post-header">
+            <div class="blog-post-category">${post.category}</div>
+            <h1 class="blog-post-title">${post.title}</h1>
+            <div class="blog-post-meta">
+                <span><i class="fas fa-calendar"></i>${post.date}</span>
+                <span><i class="fas fa-clock"></i>${post.readTime}</span>
+                <span><i class="fas fa-user"></i>${post.author}</span>
+            </div>
+            <div class="blog-post-tags">
+                ${post.tags.map(tag => `<span class="blog-post-tag">${tag}</span>`).join('')}
+            </div>
+        </div>
+        <div class="blog-post-content">
+            ${post.content}
+        </div>
+    `;
+    
+    // Show modal with animation
+    modal.style.display = 'flex';
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+function closeBlogPost() {
+    const modal = document.getElementById('blog-modal');
+    
+    modal.classList.remove('active');
+    setTimeout(() => {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }, 300);
+}
+
+// Close modal when clicking outside content
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('blog-modal');
+    if (e.target === modal) {
+        closeBlogPost();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('blog-modal');
+        if (modal.classList.contains('active')) {
+            closeBlogPost();
+        }
+    }
+});

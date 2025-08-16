@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Dashboard - Portfolio Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-blog"></i> Blog Dashboard</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a href="#" data-section="upload">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload Blog</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="manage">
+                        <i class="fas fa-list"></i>
+                        <span>Manage Blogs</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="preview">
+                        <i class="fas fa-eye"></i>
+                        <span>Preview</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 id="page-title">Upload New Blog</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="save-draft">
+                        <i class="fas fa-save"></i> Save Draft
+                    </button>
+                    <button class="btn btn-success" id="publish-blog">
+                        <i class="fas fa-paper-plane"></i> Publish
+                    </button>
+                </div>
+            </header>
+
+            <!-- Upload Section -->
+            <section id="upload-section" class="content-section active">
+                <div class="upload-container">
+                    <div class="blog-form">
+                        <div class="form-group">
+                            <label for="blog-title">Blog Title</label>
+                            <input type="text" id="blog-title" placeholder="Enter your blog title...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="blog-category">Category</label>
+                            <select id="blog-category">
+                                <option value="">Select a category</option>
+                                <option value="technology">Technology</option>
+                                <option value="design">Design</option>
+                                <option value="development">Development</option>
+                                <option value="personal">Personal</option>
+                                <option value="tutorial">Tutorial</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="blog-tags">Tags</label>
+                            <input type="text" id="blog-tags" placeholder="Enter tags separated by commas...">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="blog-excerpt">Excerpt</label>
+                            <textarea id="blog-excerpt" rows="3" placeholder="Brief description of your blog post..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="featured-image">Featured Image</label>
+                            <div class="file-upload-area" id="image-upload">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drag & drop an image here or click to browse</p>
+                                <input type="file" id="featured-image" accept="image/*" hidden>
+                            </div>
+                            <div id="image-preview" class="image-preview hidden"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="blog-content">Blog Content</label>
+                            <div class="editor-toolbar">
+                                <button type="button" class="editor-btn" data-command="bold"><i class="fas fa-bold"></i></button>
+                                <button type="button" class="editor-btn" data-command="italic"><i class="fas fa-italic"></i></button>
+                                <button type="button" class="editor-btn" data-command="underline"><i class="fas fa-underline"></i></button>
+                                <button type="button" class="editor-btn" data-command="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
+                                <button type="button" class="editor-btn" data-command="insertOrderedList"><i class="fas fa-list-ol"></i></button>
+                                <button type="button" class="editor-btn" data-command="createLink"><i class="fas fa-link"></i></button>
+                            </div>
+                            <div id="blog-content" class="content-editor" contenteditable="true" placeholder="Start writing your blog content here..."></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manage Blogs Section -->
+            <section id="manage-section" class="content-section">
+                <div class="manage-container">
+                    <div class="search-filter">
+                        <input type="text" id="search-blogs" placeholder="Search blogs...">
+                        <select id="filter-category">
+                            <option value="">All Categories</option>
+                            <option value="technology">Technology</option>
+                            <option value="design">Design</option>
+                            <option value="development">Development</option>
+                            <option value="personal">Personal</option>
+                            <option value="tutorial">Tutorial</option>
+                        </select>
+                    </div>
+                    <div id="blogs-list" class="blogs-grid">
+                        <!-- Blog items will be dynamically inserted here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section id="preview-section" class="content-section">
+                <div class="preview-container">
+                    <div id="blog-preview" class="blog-preview">
+                        <h2>Blog Preview</h2>
+                        <p>Select a blog to preview or create a new one.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <div class="settings-container">
+                    <h2>Dashboard Settings</h2>
+                    <div class="settings-group">
+                        <h3>Export Options</h3>
+                        <button class="btn btn-outline" id="export-json">
+                            <i class="fas fa-download"></i> Export as JSON
+                        </button>
+                        <button class="btn btn-outline" id="import-json">
+                            <i class="fas fa-upload"></i> Import JSON
+                        </button>
+                        <input type="file" id="import-file" accept=".json" hidden>
+                    </div>
+                    <div class="settings-group">
+                        <h3>Data Management</h3>
+                        <button class="btn btn-danger" id="clear-all">
+                            <i class="fas fa-trash"></i> Clear All Data
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for confirmations -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="modal-title">Confirm Action</h3>
+            <p id="modal-message">Are you sure you want to proceed?</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                <button class="btn btn-primary" id="modal-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

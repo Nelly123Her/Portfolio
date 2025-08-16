@@ -1,0 +1,217 @@
+{% extends 'blog/base.html' %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Filter Bar -->
+<div class="filter-bar">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+            <div class="filter-group">
+                <label class="filter-label">Sort by popular</label>
+                <select class="form-select form-select-sm">
+                    <option>Most Popular</option>
+                    <option>Most Recent</option>
+                    <option>Most Viewed</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Courses</label>
+                <select class="form-select form-select-sm">
+                    <option>All Courses</option>
+                    <option>Web Development</option>
+                    <option>Mobile Development</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Category: React</label>
+                <select class="form-select form-select-sm">
+                    <option>React</option>
+                    <option>Vue</option>
+                    <option>Angular</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="d-flex align-items-center gap-2">
+            <a href="{% url 'blog:portfolio' %}" target="_blank" class="btn btn-primary btn-sm">
+                <i class="fas fa-external-link-alt"></i> View Portfolio
+            </a>
+            <button class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-filter"></i> Filters
+            </button>
+            <button class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-search"></i>
+            </button>
+            <button class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-th"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Today Trending Section -->
+<div class="section-header">
+    <h4 class="section-title">Today Trending</h4>
+</div>
+
+<!-- Posts Grid -->
+<div class="posts-grid">
+    {% if posts %}
+        {% for post in posts %}
+        <div class="post-card">
+            <div class="post-thumbnail">
+                {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                {% else %}
+                    <div class="placeholder-thumbnail">
+                        <i class="fas fa-code"></i>
+                    </div>
+                {% endif %}
+                <div class="post-overlay">
+                    <div class="post-actions">
+                        <a href="{% url 'blog:preview_post' post.id %}" class="btn btn-sm btn-light">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{% url 'blog:edit_post' post.id %}" class="btn btn-sm btn-light">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-content">
+                <div class="post-meta">
+                    <div class="post-rating">
+                        <i class="fas fa-star text-warning"></i>
+                        <span>4.5</span>
+                    </div>
+                    <div class="post-views">
+                        <i class="fas fa-eye"></i>
+                        <span>{{ post.views|default:"0" }}k</span>
+                    </div>
+                </div>
+                
+                <h6 class="post-title">{{ post.title|truncatechars:40 }}</h6>
+                
+                <div class="post-footer">
+                    <div class="post-author">
+                        <div class="author-avatar">MJ</div>
+                        <span class="author-name">Mr. Jhone</span>
+                    </div>
+                    <div class="post-status">
+                        {% if post.status == 'published' %}
+                            <span class="badge bg-success">Published</span>
+                        {% else %}
+                            <span class="badge bg-warning">Draft</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- Add New Post Card -->
+        <div class="post-card add-post-card">
+            <a href="{% url 'blog:create_post' %}" class="add-post-link">
+                <div class="add-post-content">
+                    <i class="fas fa-plus fa-2x mb-3"></i>
+                    <h6>Create New Post</h6>
+                    <p class="text-muted small">Add a new blog post</p>
+                </div>
+            </a>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="text-center py-5">
+                <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No posts yet</h5>
+                <p class="text-muted">Create your first blog post to get started!</p>
+                <a href="{% url 'blog:create_post' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Create First Post
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Quick Stats -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-tags me-2"></i>Categories</h6>
+            </div>
+            <div class="card-body">
+                {% if categories %}
+                    {% for category in categories %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>{{ category.name }}</span>
+                            <span class="badge bg-primary">{{ category.posts.count }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted mb-0">No categories created yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-hashtag me-2"></i>Popular Tags</h6>
+            </div>
+            <div class="card-body">
+                {% if tags %}
+                    {% for tag in tags|slice:":10" %}
+                        <span class="badge bg-secondary me-2 mb-2">{{ tag.name }}</span>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted mb-0">No tags created yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleStatus(postId) {
+    fetch(`/api/posts/${postId}/toggle-status/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status) {
+            location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error toggling post status');
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}

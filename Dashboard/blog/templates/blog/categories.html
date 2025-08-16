@@ -1,0 +1,305 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}Categories - Blog Dashboard{% endblock %}
+{% block page_title %}Categories{% endblock %}
+
+{% block content %}
+<!-- Categories Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="section-title mb-1">Categories</h4>
+        <p class="text-muted mb-0">Organize your blog posts with categories</p>
+    </div>
+    <div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+            <i class="fas fa-plus me-2"></i>Add Category
+        </button>
+    </div>
+</div>
+
+<!-- Categories Grid -->
+<div class="posts-grid">
+    {% for category in categories %}
+    <div class="card post-card" data-category-id="{{ category.id }}">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="flex-grow-1">
+                    <h5 class="card-title mb-2">{{ category.name }}</h5>
+                    <p class="card-text text-muted small">{{ category.description|default:"No description" }}</p>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item edit-category-btn" href="#" 
+                               data-category-id="{{ category.id }}" 
+                               data-category-name="{{ category.name }}" 
+                               data-category-description="{{ category.description|default:'' }}">
+                                <i class="fas fa-edit me-2"></i>Edit
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger delete-category-btn" href="#" 
+                               data-category-id="{{ category.id }}" 
+                               data-category-name="{{ category.name }}">
+                                <i class="fas fa-trash me-2"></i>Delete
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Category Stats -->
+            <div class="row g-2 mb-3">
+                <div class="col-4">
+                    <div class="text-center">
+                        <div class="fw-bold text-primary">{{ category.posts.count }}</div>
+                        <div class="small text-muted">Posts</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="text-center">
+                        <div class="fw-bold text-success">{{ category.published_count }}</div>
+                        <div class="small text-muted">Published</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="text-center">
+                        <div class="fw-bold text-warning">{{ category.created_at|date:"M d" }}</div>
+                        <div class="small text-muted">Created</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Posts -->
+            {% if category.posts.all %}
+            <div class="border-top pt-3">
+                <h6 class="small fw-bold text-muted mb-2">RECENT POSTS</h6>
+                {% for post in category.posts.all|slice:":3" %}
+                <div class="d-flex align-items-center mb-2">
+                    <div class="flex-grow-1">
+                        <a href="{% url 'blog:preview_post' post.id %}" class="text-decoration-none">
+                            <div class="small fw-500">{{ post.title|truncatechars:30 }}</div>
+                        </a>
+                    </div>
+                    <span class="badge bg-{{ post.status|yesno:'success,warning' }} ms-2">{{ post.status|title }}</span>
+                </div>
+                {% endfor %}
+                {% if category.posts.count > 3 %}
+                <div class="text-center mt-2">
+                    <small class="text-muted">+{{ category.posts.count|add:"-3" }} more posts</small>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="card text-center py-5">
+            <div class="card-body">
+                <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                <h5 class="card-title">No Categories Yet</h5>
+                <p class="card-text text-muted">Start organizing your blog posts by creating your first category.</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                    <i class="fas fa-plus me-2"></i>Create First Category
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Category Modals -->
+<!-- Add Category Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addCategoryForm">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="categoryName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="categoryDescription" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editCategoryForm">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <input type="hidden" id="editCategoryId" name="category_id">
+                    <div class="mb-3">
+                        <label for="editCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="editCategoryName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCategoryDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editCategoryDescription" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the category <strong id="deleteCategoryName"></strong>?</p>
+                <p class="text-muted small">This action cannot be undone. Posts in this category will become uncategorized.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteCategory">Delete Category</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    let currentCategoryId = null;
+    
+    // Edit category button click
+    $('.edit-category-btn').click(function(e) {
+        e.preventDefault();
+        const categoryId = $(this).data('category-id');
+        const categoryName = $(this).data('category-name');
+        const categoryDescription = $(this).data('category-description');
+        
+        $('#editCategoryId').val(categoryId);
+        $('#editCategoryName').val(categoryName);
+        $('#editCategoryDescription').val(categoryDescription);
+        
+        $('#editCategoryModal').modal('show');
+    });
+    
+    // Delete category button click
+    $('.delete-category-btn').click(function(e) {
+        e.preventDefault();
+        currentCategoryId = $(this).data('category-id');
+        const categoryName = $(this).data('category-name');
+        
+        $('#deleteCategoryName').text(categoryName);
+        $('#deleteCategoryModal').modal('show');
+    });
+    
+    // Add category form submission
+    $('#addCategoryForm').submit(function(e) {
+        e.preventDefault();
+        
+        $.ajax({
+            url: '{% url "blog:categories" %}',
+            method: 'POST',
+            data: {
+                'action': 'add',
+                'name': $('#categoryName').val(),
+                'description': $('#categoryDescription').val(),
+                'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function() {
+                alert('An error occurred while adding the category.');
+            }
+        });
+    });
+    
+    // Edit category form submission
+    $('#editCategoryForm').submit(function(e) {
+        e.preventDefault();
+        
+        $.ajax({
+            url: '{% url "blog:categories" %}',
+            method: 'POST',
+            data: {
+                'action': 'edit',
+                'category_id': $('#editCategoryId').val(),
+                'name': $('#editCategoryName').val(),
+                'description': $('#editCategoryDescription').val(),
+                'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function() {
+                alert('An error occurred while updating the category.');
+            }
+        });
+    });
+    
+    // Confirm delete category
+    $('#confirmDeleteCategory').click(function() {
+        if (currentCategoryId) {
+            $.ajax({
+                url: '{% url "blog:categories" %}',
+                method: 'POST',
+                data: {
+                    'action': 'delete',
+                    'category_id': currentCategoryId,
+                    'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.error);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while deleting the category.');
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

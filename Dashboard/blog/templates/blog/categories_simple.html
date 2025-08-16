@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Categories - Blog Dashboard{% endblock %}
+{% block page_title %}Categories{% endblock %}
+
+{% block content %}
+<h1>Categories</h1>
+<p>Simple categories page to test inheritance</p>
+
+{% for category in categories %}
+    <div>
+        <h3>{{ category.name }}</h3>
+        <p>Published posts: {{ category.published_count }}</p>
+    </div>
+{% endfor %}
+{% endblock %}

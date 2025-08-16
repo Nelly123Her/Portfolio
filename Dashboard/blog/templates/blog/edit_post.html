@@ -1,0 +1,291 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Edit Post - Blog Dashboard{% endblock %}
+{% block page_title %}Edit Post{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 text-white fw-bold">Edit Post</h1>
+    <div>
+        <a href="{% url 'blog:preview_post' post.id %}" class="btn btn-outline-light me-2">
+            <i class="fas fa-eye me-2"></i>Preview
+        </a>
+        <a href="{% url 'blog:dashboard' %}" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Edit Post</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" id="editPostForm">
+                    {% csrf_token %}
+                    
+                    <!-- Title -->
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-bold">Title *</label>
+                        <input type="text" class="form-control" id="title" name="title" 
+                               value="{{ post.title }}" required maxlength="200">
+                        <div class="form-text">A compelling title for your blog post</div>
+                    </div>
+                    
+                    <!-- Excerpt -->
+                    <div class="mb-3">
+                        <label for="excerpt" class="form-label fw-bold">Excerpt</label>
+                        <textarea class="form-control" id="excerpt" name="excerpt" rows="3" 
+                                  maxlength="500">{{ post.excerpt }}</textarea>
+                        <div class="form-text">A brief summary of your post (optional)</div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="mb-3">
+                        <label for="content" class="form-label fw-bold">Content *</label>
+                        <textarea class="form-control" id="content" name="content" rows="15" 
+                                  required>{{ post.content }}</textarea>
+                        <div class="form-text">Write your blog post content here. HTML is supported.</div>
+                    </div>
+                    
+                    <!-- Featured Image -->
+                    <div class="mb-3">
+                        <label for="featured_image" class="form-label fw-bold">Featured Image</label>
+                        {% if post.featured_image %}
+                            <div class="mb-2">
+                                <img src="{{ post.featured_image.url }}" alt="Current featured image" 
+                                     class="img-thumbnail" style="max-height: 200px;">
+                                <div class="form-text">Current featured image</div>
+                            </div>
+                        {% endif %}
+                        <input type="file" class="form-control" id="featured_image" name="featured_image" 
+                               accept="image/*">
+                        <div class="form-text">Upload a new image to replace the current one (optional)</div>
+                        <div id="imagePreview" class="mt-2"></div>
+                    </div>
+                    
+                    <!-- Category -->
+                    <div class="mb-3">
+                        <label for="category" class="form-label fw-bold">Category</label>
+                        <select class="form-select" id="category" name="category">
+                            <option value="">Select a category</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}" 
+                                        {% if post.category.id == category.id %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Tags -->
+                    <div class="mb-3">
+                        <label for="tags" class="form-label fw-bold">Tags</label>
+                        <input type="text" class="form-control" id="tags" name="tags" 
+                               value="{% for tag in post.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                        <div class="form-text">Separate tags with commas (e.g., technology, web development, python)</div>
+                    </div>
+                    
+                    <!-- Status -->
+                    <div class="mb-4">
+                        <label for="status" class="form-label fw-bold">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="draft" {% if post.status == 'draft' %}selected{% endif %}>Draft</option>
+                            <option value="published" {% if post.status == 'published' %}selected{% endif %}>Published</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Post
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                            <i class="fas fa-file-alt me-2"></i>Save as Draft
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="publishPost()">
+                            <i class="fas fa-globe me-2"></i>Update & Publish
+                        </button>
+                        <a href="{% url 'blog:dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Writing Tips -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Writing Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Use clear, descriptive titles</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Write engaging excerpts</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Break content into sections</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Use relevant tags</li>
+                    <li class="mb-0"><i class="fas fa-check text-success me-2"></i>Add high-quality images</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Post Info -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Post Information</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li><strong>Created:</strong> {{ post.created_at|date:"M d, Y H:i" }}</li>
+                    <li><strong>Updated:</strong> {{ post.updated_at|date:"M d, Y H:i" }}</li>
+                    <li><strong>Views:</strong> {{ post.views }}</li>
+                    <li><strong>Status:</strong> 
+                        {% if post.status == 'published' %}
+                            <span class="badge bg-success">Published</span>
+                        {% else %}
+                            <span class="badge bg-warning">Draft</span>
+                        {% endif %}
+                    </li>
+                    {% if post.published_at %}
+                    <li><strong>Published:</strong> {{ post.published_at|date:"M d, Y H:i" }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Image preview functionality
+document.getElementById('featured_image').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('imagePreview');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = `
+                <div class="mt-2">
+                    <img src="${e.target.result}" alt="Preview" class="img-thumbnail" style="max-height: 200px;">
+                    <div class="form-text">New image preview</div>
+                </div>
+            `;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.innerHTML = '';
+    }
+});
+
+// Save as draft
+function saveDraft() {
+    document.getElementById('status').value = 'draft';
+    document.getElementById('editPostForm').submit();
+}
+
+// Publish post
+function publishPost() {
+    document.getElementById('status').value = 'published';
+    document.getElementById('editPostForm').submit();
+}
+
+// Auto-save functionality (every 30 seconds)
+let autoSaveInterval;
+let hasUnsavedChanges = false;
+
+function startAutoSave() {
+    autoSaveInterval = setInterval(function() {
+        if (hasUnsavedChanges) {
+            autoSave();
+        }
+    }, 30000); // 30 seconds
+}
+
+function autoSave() {
+    const formData = new FormData(document.getElementById('editPostForm'));
+    formData.set('status', 'draft'); // Always save as draft for auto-save
+    
+    fetch(window.location.href, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            hasUnsavedChanges = false;
+            showAutoSaveNotification();
+        }
+    })
+    .catch(error => {
+        console.error('Auto-save failed:', error);
+    });
+}
+
+function showAutoSaveNotification() {
+    // Create a temporary notification
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-success position-fixed';
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; opacity: 0.9;';
+    notification.innerHTML = '<i class="fas fa-check me-2"></i>Auto-saved as draft';
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Track changes
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('editPostForm');
+    const inputs = form.querySelectorAll('input, textarea, select');
+    
+    inputs.forEach(input => {
+        input.addEventListener('change', () => {
+            hasUnsavedChanges = true;
+        });
+        
+        if (input.type === 'text' || input.tagName === 'TEXTAREA') {
+            input.addEventListener('input', () => {
+                hasUnsavedChanges = true;
+            });
+        }
+    });
+    
+    startAutoSave();
+});
+
+// Get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Warn about unsaved changes
+window.addEventListener('beforeunload', function(e) {
+    if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
+</script>
+{% endblock %}

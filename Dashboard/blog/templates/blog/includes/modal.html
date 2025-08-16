@@ -1,0 +1,22 @@
+<!-- Reusable Modal Component -->
+<!-- Usage: {% include 'blog/includes/modal.html' with modal_id='myModal' modal_title='My Title' modal_size='lg' %} -->
+<div class="modal fade" id="{{ modal_id }}" tabindex="-1">
+    <div class="modal-dialog{% if modal_size %} modal-{{ modal_size }}{% endif %}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ modal_title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            {% if modal_body %}
+            <div class="modal-body">
+                {{ modal_body|safe }}
+            </div>
+            {% endif %}
+            {% if modal_footer %}
+            <div class="modal-footer">
+                {{ modal_footer|safe }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
