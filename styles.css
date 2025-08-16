@@ -1975,7 +1975,7 @@ section {
     }
 
     .timeline::before {
-        left: 18px;
+        left: 20px;
         transform: none;
         width: 2px;
     }
@@ -1983,15 +1983,15 @@ section {
     .timeline-item {
         width: 100%;
         left: 0;
-        padding-left: 45px;
+        padding-left: 50px;
         padding-right: 10px;
         text-align: left;
         margin: 25px 0;
     }
 
     .timeline-item .timeline-marker {
-        left: 8px;
-        top: 12px;
+        left: 10px;
+        top: 15px;
     }
 
     .timeline-dot {
@@ -2007,13 +2007,14 @@ section {
     .timeline-card {
         border-radius: 12px;
         margin-bottom: 15px;
+        margin-left: 5px;
     }
 
     .timeline-header {
-        padding: 18px 18px 12px;
+        padding: 20px 20px 15px;
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        gap: 12px;
     }
 
     .timeline-date {
@@ -2027,7 +2028,7 @@ section {
     }
 
     .timeline-content {
-        padding: 18px;
+        padding: 20px;
     }
 
     .role-info h3 {
@@ -2351,17 +2352,18 @@ section {
     }
 
     .timeline::before {
-        left: 12px;
+        left: 15px;
     }
 
     .timeline-item {
-        padding-left: 35px;
+        padding-left: 40px;
         padding-right: 8px;
         margin: 20px 0;
     }
 
     .timeline-item .timeline-marker {
-        left: 2px;
+        left: 5px;
+        top: 12px;
     }
 
     .timeline-dot {
@@ -2371,12 +2373,12 @@ section {
     }
 
     .timeline-header {
-        padding: 12px 12px 8px;
-        gap: 6px;
+        padding: 15px 15px 10px;
+        gap: 8px;
     }
 
     .timeline-content {
-        padding: 12px;
+        padding: 15px;
     }
 
     .role-info h3 {
